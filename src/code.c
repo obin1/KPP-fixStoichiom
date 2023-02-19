@@ -94,6 +94,7 @@ FILE * sparse_dataFile = 0;
 FILE * sparse_jacFile = 0;
 FILE * sparse_hessFile = 0;
 FILE * sparse_stoicmFile = 0;
+FILE * biadjacencyFile = 0;
 FILE * stochasticFile = 0;
 FILE * global_dataFile = 0;
 FILE * hessianFile = 0;

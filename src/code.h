@@ -81,6 +81,7 @@ extern FILE * sparse_dataFile;
 extern FILE * sparse_jacFile;
 extern FILE * sparse_hessFile;
 extern FILE * sparse_stoicmFile;
+extern FILE * biadjacencyFile;
 extern FILE * stoichiomFile;
 extern FILE * stochasticFile;
 extern FILE * utilFile;

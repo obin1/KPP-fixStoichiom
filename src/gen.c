@@ -1778,7 +1778,14 @@ double *stoicm;
   NewLines(1);
   DeclareConstant( NSTOICM, ascii( max( nnz_stoicm, 1 ) ) );
 
-/* Free data structure vectors */
+  /* Write the biadjacency matrix of the species reaction graph */
+  UseFile( biadjacencyFile );
+  fprintf( biadjacencyFile,"species index (row), reaction index (col), stoichiometric coefficient\n");
+  for (k=0; k<nnz_stoicm; k++) {
+	  fprintf(biadjacencyFile,"%d, %d, %f\n", irow_stoicm[k], icol_stoicm[k], stoicm[k]);
+  }
+
+  /* Free data structure vectors */
   free(irow_stoicm); free(ccol_stoicm); free(icol_stoicm); free(stoicm);
 }
 
@@ -3737,6 +3744,7 @@ int n;
   if( sparse_jacFile )    fclose( sparse_jacFile );
   if( sparse_hessFile )   fclose( sparse_hessFile );
   if( sparse_stoicmFile ) fclose( sparse_stoicmFile );
+  if( biadjacencyFile )   fclose( biadjacencyFile );
   if( stoichiomFile )     fclose( stoichiomFile );
   if( utilFile )          fclose( utilFile );
   if( stochasticFile )    fclose( stochasticFile );

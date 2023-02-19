@@ -825,6 +825,10 @@ void Use_F90()
     sprintf( buf, "_StoichiomSP.%s", f90Suffix );
     OpenFile( &sparse_stoicmFile, rootFileName, buf,
 	      "Sparse Stoichiometric Data Structures File" );
+    
+    sprintf( buf, "_BiadjacencyMatrix.csv");
+    OpenFile( &biadjacencyFile, rootFileName, buf,
+	      "Sparse Biadjacency Matrix, aka Stoichiometric Matrix, in CSV format" );
   }
 
   // _Util
