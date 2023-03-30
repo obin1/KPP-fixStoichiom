@@ -1716,6 +1716,7 @@ int i,j,k, nnz_stoicm;
 int *irow_stoicm;
 int *ccol_stoicm;
 int *icol_stoicm;
+int firstindex; /* does numbering start at zero or one */
 double *stoicm;
 
 /* Compute the sparsity structure and allocate data structure vectors */
@@ -1749,7 +1750,9 @@ double *stoicm;
   }
   ccol_stoicm[ EqnNr ] =  nnz_stoicm;
 
+  firstindex = 0;
   if( (useLang==F77_LANG)||(useLang==F90_LANG) ) {
+	firstindex ++;
         for (k=0; k<nnz_stoicm; k++) {
            irow_stoicm[k]++; icol_stoicm[k]++;
         }
@@ -1780,11 +1783,26 @@ double *stoicm;
 
   /* Write the biadjacency matrix of the species reaction graph */
   UseFile( biadjacencyFile );
-  fprintf( biadjacencyFile,"species index (row), reaction index (col), stoichiometric coefficient\n");
+  fprintf( biadjacencyFile,"spc_name, species index (row), reaction index (col), stoichiometric coefficient\n");
   for (k=0; k<nnz_stoicm; k++) {
-	  fprintf(biadjacencyFile,"%d, %d, %f\n", irow_stoicm[k], icol_stoicm[k], stoicm[k]);
+          fprintf(biadjacencyFile,"%s, %d, %d, %f\n",SpeciesTable[Code[irow_stoicm[k]-firstindex]].name, irow_stoicm[k], icol_stoicm[k], stoicm[k]);
   }
 
+
+
+    /* Write the species-reaction bipartite graph in DOT (graphviz) format */
+    UseFile( graphvizFile );
+      fprintf( graphvizFile,"strict digraph { \n");
+        for (k=0; k<nnz_stoicm; k++) { 
+		if (stoicm[k]<0) {
+			fprintf(graphvizFile,"%s %s %s%d\n",SpeciesTable[Code[irow_stoicm[k]-firstindex]].name, "->","R", icol_stoicm[k]); 
+		}
+		else {
+			fprintf(graphvizFile,"%s%d %s %s\n","R", icol_stoicm[k],"->",SpeciesTable[Code[irow_stoicm[k]-firstindex]].name);
+	        }
+      	}
+
+      fprintf( graphvizFile,"}");
   /* Free data structure vectors */
   free(irow_stoicm); free(ccol_stoicm); free(icol_stoicm); free(stoicm);
 }
@@ -3745,6 +3763,7 @@ int n;
   if( sparse_hessFile )   fclose( sparse_hessFile );
   if( sparse_stoicmFile ) fclose( sparse_stoicmFile );
   if( biadjacencyFile )   fclose( biadjacencyFile );
+  if( graphvizFile )      fclose( graphvizFile );
   if( stoichiomFile )     fclose( stoichiomFile );
   if( utilFile )          fclose( utilFile );
   if( stochasticFile )    fclose( stochasticFile );

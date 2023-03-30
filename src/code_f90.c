@@ -831,6 +831,10 @@ void Use_F90()
 	      "Sparse Biadjacency Matrix, aka Stoichiometric Matrix, in CSV format" );
   }
 
+      sprintf( buf, "_SpeciesReactionGraph.gv");
+          OpenFile( &graphvizFile, rootFileName, buf,
+               "Representation of the mechanism as a bipartite species-reaction graph in DOT format" );
+
   // _Util
   sprintf( buf, "_Util.%s", f90Suffix );
   OpenFile( &utilFile, rootFileName, buf, "Auxiliary Routines File" );
